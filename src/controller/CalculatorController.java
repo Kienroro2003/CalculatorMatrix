@@ -87,7 +87,8 @@ public class CalculatorController {
             System.out.println("3. Tích 2 ma trận.");
             System.out.println("4. Ma trận chuyển vị.");
             System.out.println("5. Nhân ma trận với K.");
-            System.out.println("6. Thoát.");
+            System.out.println("6. Lưu danh sách ma trận.");
+            System.out.println("7. Thoát.");
             System.out.print("Nhập sự lựa chọn của bạn: ");
             int choose = sc.nextInt();
             matrixService.showTwoMatricesLast();
@@ -154,6 +155,10 @@ public class CalculatorController {
                     break;
                 }
                 case 6:{
+                    matrixService.saveData();
+                    break;
+                }
+                case 7:{
                     return;
                 }
             }

@@ -1,8 +1,11 @@
 package service;
 
 import entity.Matrix;
+import entity.SquareMatrix;
+import exception.MatrixNotSquareException;
 
 public class CalculatorServiceImpl implements CalculatorService{
+    private static CalculatorService calculatorService;
     private boolean isSquareMatrix(int rows, int cols){
         return rows == cols;
     }
@@ -59,7 +62,7 @@ public class CalculatorServiceImpl implements CalculatorService{
 
     @Override
     public Matrix minusMatrices(Matrix matrixA, Matrix matrixB) {
-        if(areMatricesSameSize(matrixA,matrixB)){
+        if(!areMatricesSameSize(matrixA,matrixB)){
             throw new IllegalArgumentException("Kích thước các ma trận không hợp lệ cho phép trừ ma trận.");
         }
         int rows = matrixA.getRows();
@@ -84,5 +87,22 @@ public class CalculatorServiceImpl implements CalculatorService{
             }
         }
         return res;
+    }
+
+    @Override
+    public Matrix getInvertibleMatrix(Matrix matrix) {
+        if(matrix.getRows() != matrix.getCols()){
+            throw new MatrixNotSquareException("Không phải ma trận vuông");
+        }
+        SquareMatrix squareMatrix = (SquareMatrix) matrix;
+//        SquareMatrix res =
+        return null;
+    }
+
+    public static CalculatorService getInstance(){
+        if(calculatorService == null){
+            calculatorService = new CalculatorServiceImpl();
+        }
+        return calculatorService;
     }
 }

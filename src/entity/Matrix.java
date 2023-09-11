@@ -1,8 +1,16 @@
+/*
+ * Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package entity;
 
 import java.util.Scanner;
 
-public class Matrix {
+public class Matrix implements Cloneable {
     private float[][] matrix;
     private int rows;
     private int cols;
@@ -34,16 +42,22 @@ public class Matrix {
         this.cols = cols;
     }
 
+    public Matrix(float[][] matrix) {
+        this.matrix = matrix;
+        this.rows = matrix.length;
+        this.cols = matrix[0].length;
+    }
+
     public float[][] getMatrix() {
         return matrix;
     }
 
     public int getRows() {
-        return rows;
+        return matrix.length;
     }
 
     public int getCols() {
-        return cols;
+        return matrix[0].length;
     }
 
     public void showMatrix(){
@@ -79,4 +93,58 @@ public class Matrix {
         return matrix[row];
     }
 
+    private static float gcd(float a, float b) {
+        if (b == 0) {
+            return a;
+        } else {
+            return gcd(b, a % b);
+        }
+    }
+
+    // Hàm tính bội chung nhỏ nhất (LCM) dựa trên GCD
+    private static float lcm(float a, float b) {
+        return (a * b) / gcd(a, b);
+    }
+
+
+    public Matrix convertToRowEchelonMatrix() {
+        Matrix matrix = new Matrix(this.getMatrix().clone(), this.getRows(), this.getCols());
+        if(this.getRows() == this.getCols() && this.getRows() == 2)return matrix;
+        else{
+            for (int row = 1; row < this.getRows(); row++) {
+                int colTarget = findPivot(matrix.getRow(row - 1));
+                if(colTarget != this.getCols()){
+                    matrix.showMatrix();
+                    float pivotAbove = this.getElementMatrix(row - 1, colTarget);
+                    System.out.println("-----------------------------------");
+                    for(int k = row; k < this.getRows(); k++){
+                        float pivotFocus = this.getElementMatrix(k, colTarget);
+                        float lcm = lcm(pivotAbove, pivotFocus);
+                        float num1 = lcm / pivotAbove;
+                        float num2 = lcm / pivotFocus;
+
+                        System.out.printf("%.2fh%d + %.2fh%d -> h%d\n", num2, k, num1, row - 1, k);
+                        for (int col = colTarget; col < this.getCols(); col++) {
+                            matrix.setElementMatrix(k, col, getElementMatrix(row - 1, col) * -num1 + getElementMatrix(k, col) * num2);
+                        }
+                    }
+                }
+            }
+        }
+        return matrix;
+    }
+
+    private int findPivot(float[] row){
+        int cols = row.length;
+        int col = 0;
+        for (; col < cols; col++) {
+            if(row[col] != 0)return col;
+        }
+        return col;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

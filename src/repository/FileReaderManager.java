@@ -1,6 +1,7 @@
 package repository;
 
 import entity.Matrix;
+import entity.SquareMatrix;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -24,7 +25,11 @@ public class FileReaderManager implements FileReaderManagerImpl{
                     countRows = 0;
                 } else if (line.startsWith("Số cột: ")) {
                     numCols = Integer.parseInt(line.substring(8));
-                    matrix = new Matrix(numRows, numCols);
+                    if(numCols != numRows){
+                        matrix = new Matrix(numRows, numCols);
+                    }else{
+                        matrix = new SquareMatrix(numRows, numCols);
+                    }
                     list.add(matrix);
                 } else if (!line.isEmpty()) {
                     String[] values = line.split(" ");

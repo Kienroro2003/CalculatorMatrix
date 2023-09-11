@@ -78,5 +78,6 @@ public class MatrixServiceImpl implements MatrixService {
     @Override
     public void saveData() {
         writer.writeFile(list);
+        System.out.println("Lưu ma trận thành công!");
     }
 }
